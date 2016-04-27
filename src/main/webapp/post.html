@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Java Web Starter Application</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel="stylesheet" href="style.css" />
+	<script src="post.js"></script>
+</head>
+<body>
+	<h1>upload audio file</h1>
+	<form name='postAudioFile' onsubmit='postAudioFile(); return false; '>
+		<input type='file' name='file' />
+		<button type='button' onclick='alert("c"); postAudioFile(); alert("c1"); '>Submit</button>
+	</form>
+</body>
+<script type="text/javascript">postAudioFile();</script>
+</html>
