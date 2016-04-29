@@ -5,13 +5,15 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="style.css" />
 	<script src='http://code.jquery.com/jquery-latest.min.js'></script>
-	<script src="post.js"></script>
+	<script src="search.js"></script>
 </head>
 <body>
-	<h1>upload audio file</h1>
-	<form name='processAudioFile' method='post' enctype="multipart/form-data" onsubmit='processAudioFile(); return false; '>
-		<input type='file' id='file' name='file' />
-		<button type='button' onclick='load(); '>Submit</button>
+	<h1>Label search</h1>
+	<form name='labelSearch' method='post' >
+		<input type='keyword' id='keyword' name='keyword' />
+		<button type='button' onclick='search(); '>Submit</button>
 	</form>
+	<div id='output'>
+	</div>
 </body>
 </html>

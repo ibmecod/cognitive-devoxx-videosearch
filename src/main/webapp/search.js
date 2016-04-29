@@ -1,20 +1,14 @@
-function load()
+function search()
 {
-	var data = new FormData();
-	data.append("file", $("#file")[0].files[0]);
-
 	$.ajax
 	(
 			{
 				timeout: 3000,
-				type: "POST",
-				url: "ProcessAudioFile",
-				datatype: "json",
+				type: "GET",
+				url: "LabelSearch",
 				cache: false,
-			    contentType: false,
-			    processData: false,
-			    enctype: "multipart/form-data",
-			    data: data,
+				contentType: 'application/json; charset=utf-8',
+			    data: {"keyword": $("#keyword")[0].value, },
 				success: function(data)
 				{
 					alert(data);
