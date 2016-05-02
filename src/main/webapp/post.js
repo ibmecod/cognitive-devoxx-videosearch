@@ -6,7 +6,6 @@ function load()
 	$.ajax
 	(
 			{
-				timeout: 3000,
 				type: "POST",
 				url: "ProcessAudioFile",
 				datatype: "json",
