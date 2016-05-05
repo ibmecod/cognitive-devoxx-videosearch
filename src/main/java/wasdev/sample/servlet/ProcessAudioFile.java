@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 
 import org.apache.commons.io.FileUtils;
@@ -41,6 +42,11 @@ public class ProcessAudioFile extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
 	{
+		// set session timeout
+		
+		HttpSession session = request.getSession();
+		session.setMaxInactiveInterval(1*60*60);
+		
 		// initialize speech to text service
 		
 		logger.info("initialize speech to text service");
