@@ -2,6 +2,7 @@ function load()
 {
 	var data = new FormData();
 	data.append("file", $("#file")[0].files[0]);
+	data.append("link", $("#link")[0].value)
 
 	$.ajax
 	(

@@ -64,7 +64,7 @@ public class LabelSearch extends HttpServlet
 	    searchGraphConceptByLabelParams.put("limit", 10);
 
 	    RequestedFields concept_fields = new RequestedFields();
-//		    concept_fields.include("link");
+	    concept_fields.include("link");
 	    concept_fields.include("\"abstract\":1");
 
 	    searchGraphConceptByLabelParams.put("concept_fields", concept_fields);

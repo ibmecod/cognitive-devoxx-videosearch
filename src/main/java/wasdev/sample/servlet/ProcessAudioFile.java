@@ -3,6 +3,8 @@ package wasdev.sample.servlet;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -46,6 +48,10 @@ public class ProcessAudioFile extends HttpServlet
 		
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(1*60*60);
+		
+		// output variables
+		
+		logger.info("link=" + request.getParameter("link"));
 		
 		// initialize speech to text service
 		
@@ -111,6 +117,10 @@ public class ProcessAudioFile extends HttpServlet
 
 		newDocument = new Document(corpus, UUID.randomUUID().toString());
 		newDocument.setLabel("Loaded from web interface.");
+		
+		Map<String, String> userFields = new HashMap<>();
+		userFields.put("link", request.getParameter("link"));
+		newDocument.setUserFields(userFields);
 
 		int partCount;
 		for (partCount = 0; partCount < speechResults.getResults().size(); partCount++)
