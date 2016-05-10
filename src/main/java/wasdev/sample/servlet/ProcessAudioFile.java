@@ -8,16 +8,14 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.Part;
 
 import org.apache.commons.io.FileUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ibm.watson.developer_cloud.concept_insights.v2.ConceptInsights;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission;
@@ -33,25 +31,28 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
 /**
  * Servlet implementation class SimpleServlet
  */
-@WebServlet("/ProcessAudioFile")
+@RestController
 @MultipartConfig
-public class ProcessAudioFile extends HttpServlet
+public class ProcessAudioFile
 {
-	private static final long serialVersionUID = 1L;
-	
 	private static final Logger logger = Logger.getLogger(ProcessAudioFile.class.getName());
 
-	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
+	@RequestMapping
+	(
+			value = "/processAudioFile",
+			method = RequestMethod.POST,
+			consumes = "multipart/form-data",
+			produces = "text/html"
+	)
+	protected String processAudioFile
+	(
+			@RequestParam("file") MultipartFile file,
+			@RequestParam("link") String link
+	) throws IOException
 	{
-		// set session timeout
-		
-		HttpSession session = request.getSession();
-		session.setMaxInactiveInterval(1*60*60);
-		
 		// output variables
 		
-		logger.info("link=" + request.getParameter("link"));
+		logger.info("link=" + link);
 		
 		// initialize speech to text service
 		
@@ -83,8 +84,7 @@ public class ProcessAudioFile extends HttpServlet
 
 		logger.info("store file contents to temporary file");
 		
-	    Part filePart = request.getPart("file"); // Retrieves <input type="file" name="file">
-	    InputStream fileContentInputStream = filePart.getInputStream();
+	    InputStream fileContentInputStream = file.getInputStream();
 	    
 	    File tempFile = File.createTempFile("temp-file-name", null);
 	    
@@ -119,7 +119,7 @@ public class ProcessAudioFile extends HttpServlet
 		newDocument.setLabel("Loaded from web interface.");
 		
 		Map<String, String> userFields = new HashMap<>();
-		userFields.put("link", request.getParameter("link"));
+		userFields.put("link", link);
 		newDocument.setUserFields(userFields);
 
 		int partCount;
@@ -136,8 +136,7 @@ public class ProcessAudioFile extends HttpServlet
 		newDocument.setTimeToLive(3600);
 		conceptInsightsService.updateDocument(newDocument);
 		
-		response.setContentType("text/html");
-		response.getWriter().print("Number of parts loaded: " + partCount + ".");
+		return "Number of parts loaded: " + partCount + ".";
 		
 	}
 
