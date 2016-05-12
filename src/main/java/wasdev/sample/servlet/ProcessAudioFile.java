@@ -57,7 +57,7 @@ public class ProcessAudioFile extends HttpServlet
 	    RecognizeOptions options = new RecognizeOptions();
 	    options.contentType("audio/ogg");
 	    options.continuous(true);
-	    options.interimResults(true);
+	    options.interimResults(false);
 	    
 	    // initialize concept insights service
 	    
@@ -125,7 +125,11 @@ public class ProcessAudioFile extends HttpServlet
 
 		}	    
 	    
-		newDocument.addParts(new com.ibm.watson.developer_cloud.concept_insights.v2.model.Part("part_", stringBuilder.toString(), HttpMediaType.TEXT_PLAIN));
+		String recognizedText = stringBuilder.toString();
+		newDocument.addParts(new com.ibm.watson.developer_cloud.concept_insights.v2.model.Part("part_", recognizedText, HttpMediaType.TEXT_PLAIN));
+		System.out.println("Transcript:");
+		System.out.println(recognizedText);
+		System.out.println();
 
 		conceptInsightsService.createDocument(newDocument);
 		newDocument = conceptInsightsService.getDocument(newDocument);
