@@ -79,6 +79,7 @@ public class LabelSearch extends HttpServlet
 //	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
 //	    parameters.put(ConceptInsights.IDS, ids);
 	    parameters.put(ConceptInsights.LIMIT, 10);
+	    parameters.put("document_fields", "{\"user_fields\":1} ");
 		
 //	    parameters.put("link", Integer.valueOf(1));
 
