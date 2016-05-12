@@ -8,7 +8,7 @@ function load()
 	(
 			{
 				type: "POST",
-				url: "/rest/processAudioFile",
+				url: "/processAudioFile",
 				datatype: "json",
 				cache: false,
 			    contentType: false,
