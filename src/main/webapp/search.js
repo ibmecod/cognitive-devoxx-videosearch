@@ -5,7 +5,7 @@ function search()
 			{
 				timeout: 3000,
 				type: "GET",
-				url: "LabelSearch",
+				url: "/labelSearch",
 				cache: false,
 				contentType: 'application/json; charset=utf-8',
 			    data: {"keyword": $("#keyword")[0].value, },
@@ -14,7 +14,7 @@ function search()
 					alert(data);
 					
 				},
-				error: function()
+				error: function(jqXHR, textStatus, errorThrown)
 				{
 					alert("error");
 					
