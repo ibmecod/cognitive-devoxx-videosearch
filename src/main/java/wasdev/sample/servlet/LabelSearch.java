@@ -76,8 +76,9 @@ public class LabelSearch extends HttpServlet
 	    
 	    Map<String, Object> parameters = new HashMap<String, Object>();
 	    List<String> ids = new ArrayList<String>();
-//	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
-//	    parameters.put(ConceptInsights.IDS, ids);
+	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
+//	    ids.add("/corpora/eve6tionsto1/devoxx_corpus1");
+	    parameters.put(ConceptInsights.IDS, ids);
 	    parameters.put(ConceptInsights.LIMIT, 10);
 	    parameters.put("document_fields", "{\"user_fields\":1} ");
 		
