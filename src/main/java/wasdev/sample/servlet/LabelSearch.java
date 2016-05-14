@@ -19,6 +19,7 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermissio
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission.Permission;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Corpus;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.QueryConcepts;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.RequestedFields;
 
 /**
  * Servlet implementation class SimpleServlet
@@ -64,9 +65,11 @@ public class LabelSearch extends HttpServlet
 //	    searchGraphConceptByLabelParams.put("prefix", true);
 //	    searchGraphConceptByLabelParams.put("limit", 10);
 //
-//	    RequestedFields concept_fields = new RequestedFields();
-//	    concept_fields.include("link");
-//	    concept_fields.include("\"abstract\":1");
+	    RequestedFields concept_fields = new RequestedFields();
+	    concept_fields.include("link");
+	    concept_fields.include("\"abstract\":1");
+	    RequestedFields document_fields = new RequestedFields();
+	    document_fields.include("\"user_fields\":1");
 //
 //	    searchGraphConceptByLabelParams.put("concept_fields", concept_fields);
 //
@@ -80,9 +83,9 @@ public class LabelSearch extends HttpServlet
 //	    ids.add("/corpora/eve6tionsto1/devoxx_corpus1");
 	    parameters.put(ConceptInsights.IDS, ids);
 	    parameters.put(ConceptInsights.LIMIT, 10);
-	    parameters.put("document_fields", "{\"user_fields\":1} ");
+	    //parameters.put("document_fields", "{\"user_fields\":1} ");
 		
-//	    parameters.put("link", Integer.valueOf(1));
+	    parameters.put("link", Integer.valueOf(1));
 
 	    QueryConcepts queryConcepts = conceptInsightsService.conceptualSearch(corpus, parameters);
 
@@ -92,6 +95,7 @@ public class LabelSearch extends HttpServlet
 		
 		response.setContentType("text/html");
 		response.getWriter().print(queryConcepts.toString());
+		System.out.println(queryConcepts.toString());
 		
 	}
 
