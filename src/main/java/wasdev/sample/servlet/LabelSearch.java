@@ -53,7 +53,9 @@ public class LabelSearch extends HttpServlet
 	    Enumeration<String> e = request.getParameterNames();
 	    while (e.hasMoreElements())
 	    {
-			logger.info(e.nextElement());
+	    	String key = e.nextElement();
+	    	String value = request.getParameter(key);
+			logger.info(key + "=" + value);
 	    	
 	    }
 
