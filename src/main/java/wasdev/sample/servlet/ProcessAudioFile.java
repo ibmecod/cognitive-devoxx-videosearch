@@ -110,7 +110,7 @@ public class ProcessAudioFile extends HttpServlet
 	    Document newDocument;
 
 		newDocument = new Document(corpus, UUID.randomUUID().toString());
-		newDocument.setLabel("Loaded from web interface.");
+		newDocument.setLabel("document from Devoxx Video Channel");
 		
 		Map<String, String> userFields = new HashMap<>();
 		userFields.put("link", request.getParameter("link"));
@@ -133,7 +133,7 @@ public class ProcessAudioFile extends HttpServlet
 
 		conceptInsightsService.createDocument(newDocument);
 		newDocument = conceptInsightsService.getDocument(newDocument);
-		newDocument.setTimeToLive(3600);
+		//newDocument.setTimeToLive(3600);
 		conceptInsightsService.updateDocument(newDocument);
 		
 		response.setContentType("text/html");
