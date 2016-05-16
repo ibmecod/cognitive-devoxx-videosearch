@@ -17,7 +17,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.ibm.watson.developer_cloud.concept_insights.v2.ConceptInsights;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission.Permission;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Concept;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Corpus;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Graph;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Matches;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.QueryConcepts;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.RequestedFields;
 
@@ -60,28 +63,38 @@ public class LabelSearch extends HttpServlet
 	    	
 	    }
 
-//	    logger.info("label search");
-//		
-//	    Map <String, Object> searchGraphConceptByLabelParams = new HashMap<String, Object>();
-//	    searchGraphConceptByLabelParams.put("query", request.getParameter("keyword"));
-//	    searchGraphConceptByLabelParams.put("prefix", true);
-//	    searchGraphConceptByLabelParams.put("limit", 10);
-//
+	    logger.info("label search");
+		
+	    Map <String, Object> searchGraphConceptByLabelParams = new HashMap<String, Object>();
+	    searchGraphConceptByLabelParams.put("query", request.getParameter("keyword"));
+	    searchGraphConceptByLabelParams.put("prefix", true);
+	    searchGraphConceptByLabelParams.put("limit", 10);
+
 	    RequestedFields concept_fields = new RequestedFields();
 	    concept_fields.include("link");
 	    concept_fields.include("\"abstract\":1");
 	    RequestedFields document_fields = new RequestedFields();
 	    document_fields.include("\"user_fields\":1");
-//
-//	    searchGraphConceptByLabelParams.put("concept_fields", concept_fields);
-//
-//	    Matches matches = conceptInsightsService.searchGraphsConceptByLabel(Graph.WIKIPEDIA, searchGraphConceptByLabelParams);
+
+	    searchGraphConceptByLabelParams.put("concept_fields", concept_fields);
+
+	    Matches matches = conceptInsightsService.searchGraphsConceptByLabel(Graph.WIKIPEDIA, searchGraphConceptByLabelParams);
+	    
+	    logger.info("gather matches from label search");
+	    
+	    List<String> ids = new ArrayList<>();
+	    
+	    for (Concept concept : matches.getMatches())
+	    {
+	    	ids.add(concept.getId());
+	    	
+	    }
 	    
 	    logger.info("conceptual search");
 	    
 	    Map<String, Object> parameters = new HashMap<String, Object>();
-	    List<String> ids = new ArrayList<String>();
-	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
+//	    List<String> ids = new ArrayList<String>();
+//	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
 //	    ids.add("/corpora/eve6tionsto1/devoxx_corpus1");
 	    parameters.put(ConceptInsights.IDS, ids);
 	    parameters.put(ConceptInsights.LIMIT, 10);
@@ -96,7 +109,7 @@ public class LabelSearch extends HttpServlet
 		logger.info("output results");
 		
 		response.setContentType("text/html");
-		response.getWriter().print(queryConcepts.toString());
+		response.getWriter().print(queryConcepts.getResults().toString());
 		System.out.println(queryConcepts.toString());
 		
 	}
