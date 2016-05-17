@@ -98,6 +98,10 @@ public class LabelSearch extends HttpServlet
 //	    ids.add("/corpora/eve6tionsto1/devoxx_corpus1");
 	    parameters.put(ConceptInsights.IDS, ids);
 	    parameters.put(ConceptInsights.LIMIT, 10);
+	    
+	    RequestedFields requestedFields = new RequestedFields();
+	    requestedFields.include("link");
+	    parameters.put(ConceptInsights.DOCUMENT_FIELDS, requestedFields);
 	    //parameters.put("document_fields", "{\"user_fields\":1} ");
 		
 	    parameters.put("link", Integer.valueOf(1));
