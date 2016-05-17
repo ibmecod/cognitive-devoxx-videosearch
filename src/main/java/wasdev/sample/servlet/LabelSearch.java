@@ -100,7 +100,7 @@ public class LabelSearch extends HttpServlet
 	    parameters.put(ConceptInsights.LIMIT, 10);
 	    
 	    RequestedFields requestedFields = new RequestedFields();
-	    requestedFields.include("link");
+//	    requestedFields.include("link");
 	    parameters.put(ConceptInsights.DOCUMENT_FIELDS, requestedFields);
 	    //parameters.put("document_fields", "{\"user_fields\":1} ");
 		
