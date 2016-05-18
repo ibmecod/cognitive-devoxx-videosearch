@@ -22,6 +22,7 @@ import com.ibm.watson.developer_cloud.concept_insights.v2.ConceptInsights;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission.Permission;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Corpus;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.Corpus.Access;
 import com.ibm.watson.developer_cloud.concept_insights.v2.model.Document;
 import com.ibm.watson.developer_cloud.http.HttpMediaType;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.RecognizeOptions;
@@ -46,6 +47,7 @@ public class ProcessAudioFile extends HttpServlet
 		// output variables
 		
 		logger.info("link=" + request.getParameter("link"));
+		logger.info("documentName=" + request.getParameter("documentName"));
 		
 		// initialize speech to text service
 		
@@ -67,11 +69,30 @@ public class ProcessAudioFile extends HttpServlet
 	    conceptInsightsService.setEndPoint("https://gateway.watsonplatform.net/concept-insights/api");
 	    conceptInsightsService.setUsernameAndPassword("a425694b-f06a-4956-886d-e2e9e66d7c65", "FPhRNXvLnJ9m");
 	    
+		logger.info("create corpus");
+		
 	    final String name = "devoxx_corpus1";
 	    final String account = conceptInsightsService.getFirstAccountId();
 	    
 	    Corpus corpus = new Corpus(account, name);
 	    corpus.addAccountPermissions(new AccountPermission(account, Permission.READ_WRITE_ADMIN));
+	    
+//	    conceptInsightsService.deleteCorpus(corpus);
+//
+//	    try
+//	    {
+//	    	conceptInsightsService.createCorpus(corpus);
+//	    	corpus = conceptInsightsService.getCorpus(corpus);
+//	    	corpus.setAccess(Access.PUBLIC);
+//	    	conceptInsightsService.updateCorpus(corpus);
+//	    	
+//	    }
+//	    catch (Exception e)
+//	    {
+//	    	
+//	    }
+//	    
+//	    corpus = conceptInsightsService.getCorpus(corpus);
 	    
 	    // store file contents to temporary file
 
@@ -105,12 +126,13 @@ public class ProcessAudioFile extends HttpServlet
 	    
 	    // create document
 
-		logger.info("create document");
+		logger.info("prepare document");
 		
 	    Document newDocument;
 
 		newDocument = new Document(corpus, UUID.randomUUID().toString());
-		newDocument.setLabel("document from Devoxx Video Channel");
+		newDocument.setName(request.getParameter("documentName"));
+		newDocument.setLabel(request.getParameter("documentName"));
 		
 		Map<String, String> userFields = new HashMap<>();
 		userFields.put("link", request.getParameter("link"));
@@ -131,8 +153,16 @@ public class ProcessAudioFile extends HttpServlet
 		System.out.println(recognizedText);
 		System.out.println();
 
+		logger.info("create document");
+		
 		conceptInsightsService.createDocument(newDocument);
+		
+		logger.info("get document");
+
 		newDocument = conceptInsightsService.getDocument(newDocument);
+
+		logger.info("update document");
+		
 		//newDocument.setTimeToLive(3600);
 		conceptInsightsService.updateDocument(newDocument);
 		

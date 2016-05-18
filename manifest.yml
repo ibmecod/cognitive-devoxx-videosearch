@@ -4,8 +4,6 @@ applications:
   memory: 512M
   instances: 1
   domain: mybluemix.net
-  name: cognitive-devoxx
-  host: cognitive-devoxx
+  name: cognitive-devoxx-videosearch
+  host: cognitive-devoxx-videosearch
   disk_quota: 1024M
-  services:
-  - concept-insights-service
