@@ -9,12 +9,12 @@
 </head>
 <body>
 	<h1>upload audio file</h1>
-	<form name='processAudioFile' method='post' enctype="multipart/form-data" onsubmit='processAudioFile(); return false; '>
+	<form name='uploadAudioFile' method='post' enctype="multipart/form-data" onsubmit='uploadAudioFile(); return false; '>
 		<input type='file' id='file' name='file' />
 		<br />
-		Document name: <input type='text' id='documentName' name='documentName' />
+		<label for="documentName">Document name</label><input type='text' id='documentName' name='documentName' />
 		<br />
-		Video link URL: <input type='text' id='link' name='link' />
+		<label for="link">Video Link URL</label><input type='text' id='link' name='link' />
 		<button type='button' onclick='load(); '>Submit</button>
 	</form>
 </body>

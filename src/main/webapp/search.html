@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Java Web Starter Application</title>
+	<title>Search</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<link rel="stylesheet" href="style.css" />
 	<script src='http://code.jquery.com/jquery-latest.min.js'></script>
@@ -10,8 +10,8 @@
 <body>
 	<h1>Conceptual Search</h1>
 	<form name='labelSearch' method='post' >
-		<input type='keyword' id='keyword' name='keyword' />
-		<button type='button' onclick='search(); '>Submit</button>
+		<label for="keyword">Keyword</label><input type='text' id='keyword' name='keyword' />
+		<button type='button' onclick='search(); '>Search</button>
 	</form>
 	<div id='output'>
 	</div>

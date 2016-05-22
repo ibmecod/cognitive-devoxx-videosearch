@@ -1,122 +1,102 @@
 package wasdev.sample.servlet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Logger;
+import com.ibm.watson.developer_cloud.concept_insights.v2.ConceptInsights;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.*;
+import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission.Permission;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.*;
+import java.util.logging.Logger;
 
-import com.ibm.watson.developer_cloud.concept_insights.v2.ConceptInsights;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.AccountPermission.Permission;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.Concept;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.Corpus;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.Graph;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.Matches;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.QueryConcepts;
-import com.ibm.watson.developer_cloud.concept_insights.v2.model.RequestedFields;
+import static wasdev.sample.servlet.Constant.DEVOXX_CORPUS;
 
 /**
- * Servlet implementation class SimpleServlet
+ * Servlet implementation
  */
 @WebServlet("/labelSearch")
-public class LabelSearch extends HttpServlet
-{
-	private static final long serialVersionUID = 1L;
-	
-	private static final Logger logger = Logger.getLogger(LabelSearch.class.getName());
+public class LabelSearch extends HttpServlet {
 
-	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-	{
-	    // initialize concept insights service
-	    
-		logger.info("initialize concept insights service");
-		
-	    final ConceptInsights conceptInsightsService = new ConceptInsights();
-	    conceptInsightsService.setEndPoint("https://gateway.watsonplatform.net/concept-insights/api");
-	    conceptInsightsService.setUsernameAndPassword("a425694b-f06a-4956-886d-e2e9e66d7c65", "FPhRNXvLnJ9m");
-	    
-	    final String name = "devoxx_corpus1";
-	    final String account = conceptInsightsService.getFirstAccountId();
-	    
-	    Corpus corpus = new Corpus(account, name);
-	    corpus.addAccountPermissions(new AccountPermission(account, Permission.READ_WRITE_ADMIN));
-	    
-	    // label search
-	    
-		logger.info("enumeration");
-	    Enumeration<String> e = request.getParameterNames();
-	    while (e.hasMoreElements())
-	    {
-	    	String key = e.nextElement();
-	    	String value = request.getParameter(key);
-			logger.info(key + "=" + value);
-	    	
-	    }
+    private static final Logger LOGGER = Logger.getLogger(LabelSearch.class.getName());
 
-	    logger.info("label search");
-		
-	    Map <String, Object> searchGraphConceptByLabelParams = new HashMap<String, Object>();
-	    searchGraphConceptByLabelParams.put("query", request.getParameter("keyword"));
-	    searchGraphConceptByLabelParams.put("prefix", true);
-	    searchGraphConceptByLabelParams.put("limit", 10);
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-	    RequestedFields concept_fields = new RequestedFields();
-	    concept_fields.include("link");
-	    concept_fields.include("\"abstract\":1");
-	    RequestedFields document_fields = new RequestedFields();
-	    document_fields.include("\"user_fields\":1");
+        LOGGER.info("initialize concept insights service");
 
-	    searchGraphConceptByLabelParams.put("concept_fields", concept_fields);
+        final ConceptInsights conceptInsightsService = new ConceptInsightsConfig().getService();
 
-	    Matches matches = conceptInsightsService.searchGraphsConceptByLabel(Graph.WIKIPEDIA, searchGraphConceptByLabelParams);
-	    
-	    logger.info("gather matches from label search");
-	    
-	    List<String> ids = new ArrayList<>();
-	    
-	    for (Concept concept : matches.getMatches())
-	    {
-	    	ids.add(concept.getId());
-	    	
-	    }
-	    
-	    logger.info("conceptual search");
-	    
-	    Map<String, Object> parameters = new HashMap<String, Object>();
+        final String account = conceptInsightsService.getFirstAccountId();
+
+        Corpus corpus = new Corpus(account, DEVOXX_CORPUS);
+        corpus.addAccountPermissions(new AccountPermission(account, Permission.READ_WRITE_ADMIN));
+
+        // label search
+
+        LOGGER.info("enumeration");
+        Enumeration<String> e = request.getParameterNames();
+        while (e.hasMoreElements()) {
+            String key = e.nextElement();
+            String value = request.getParameter(key);
+            LOGGER.info(key + "=" + value);
+
+        }
+
+        LOGGER.info("label search");
+
+        Map<String, Object> searchGraphConceptByLabelParams = new HashMap<>();
+        searchGraphConceptByLabelParams.put("query", request.getParameter("keyword"));
+        searchGraphConceptByLabelParams.put("prefix", true);
+        searchGraphConceptByLabelParams.put("limit", 10);
+
+        RequestedFields concept_fields = new RequestedFields();
+        concept_fields.include("link");
+        concept_fields.include("\"abstract\":1");
+        RequestedFields document_fields = new RequestedFields();
+        document_fields.include("\"user_fields\":1");
+
+        searchGraphConceptByLabelParams.put("concept_fields", concept_fields);
+
+        Matches matches = conceptInsightsService.searchGraphsConceptByLabel(Graph.WIKIPEDIA, searchGraphConceptByLabelParams);
+
+        LOGGER.info("gather matches from label search");
+
+        List<String> ids = new ArrayList<>();
+
+        for (Concept concept : matches.getMatches()) {
+            ids.add(concept.getId());
+
+        }
+
+        LOGGER.info("conceptual search");
+
+        Map<String, Object> parameters = new HashMap<>();
 //	    List<String> ids = new ArrayList<String>();
 //	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
 //	    ids.add("/corpora/eve6tionsto1/devoxx_corpus1");
-	    parameters.put(ConceptInsights.IDS, ids);
-	    parameters.put(ConceptInsights.LIMIT, 10);
-	    
-	    RequestedFields requestedFields = new RequestedFields();
+        parameters.put(ConceptInsights.IDS, ids);
+        parameters.put(ConceptInsights.LIMIT, 10);
+
+        RequestedFields requestedFields = new RequestedFields();
 //	    requestedFields.include("link");
-	    parameters.put(ConceptInsights.DOCUMENT_FIELDS, requestedFields);
-	    //parameters.put("document_fields", "{\"user_fields\":1} ");
-		
-	    parameters.put("link", Integer.valueOf(1));
+        parameters.put(ConceptInsights.DOCUMENT_FIELDS, requestedFields);
+        //parameters.put("document_fields", "{\"user_fields\":1} ");
 
-	    QueryConcepts queryConcepts = conceptInsightsService.conceptualSearch(corpus, parameters);
+        parameters.put("link", 1);
 
-	    // output results
-	    
-		logger.info("output results");
-		
-		response.setContentType("text/html");
-		response.getWriter().print(queryConcepts.getResults().toString());
-		System.out.println(queryConcepts.toString());
-		
-	}
+        QueryConcepts queryConcepts = conceptInsightsService.conceptualSearch(corpus, parameters);
 
+        // output results
+
+        LOGGER.info("output results");
+
+        response.setContentType("text/html");
+        response.getWriter().print(queryConcepts.getResults().toString());
+        System.out.println(queryConcepts.toString());
+
+    }
 }
-
