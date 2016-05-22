@@ -21,7 +21,9 @@ import java.util.logging.Logger;
 @MultipartConfig
 public class UploadAudioFileServlet extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(UploadAudioFileServlet.class.getName());
+	private static final long serialVersionUID = -5325446104289294461L;
+	
+	private static final Logger LOGGER = Logger.getLogger(UploadAudioFileServlet.class.getName());
 
     @Override
     protected void doPost(final HttpServletRequest request,

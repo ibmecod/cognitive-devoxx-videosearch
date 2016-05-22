@@ -26,11 +26,11 @@ class ProcessAudioFile {
     private static final Logger LOGGER = Logger.getLogger(ProcessAudioFile.class.getName());
 
     /**
-     * Process the audio file asynchrounously.
+     * Process the audio file asynchronously.
      *
      * @param audioFile     the audio file
      * @param documentName  the entry documentName
-     * @param youTubeLink          the youtube youTubeLink
+     * @param youTubeLink   the YouTube link
      */
     @Async
     public void execute(final File audioFile,
@@ -51,9 +51,9 @@ class ProcessAudioFile {
     /**
      * Start speech to text process.
      *
-     * @param tempFile the temp audio file
+     * @param tempFile the audio file
      */
-    private void processSpeechToText(final File tempFile) {
+    private void processSpeechToText(final File audioFile) {
         LOGGER.info("initialize speech to text service");
 
         final RecognizeOptions options = new RecognizeOptions();
@@ -64,7 +64,7 @@ class ProcessAudioFile {
         // get speech results
         LOGGER.info("get speech results");
         try {
-            final SpeechResults recognize = new SpeechToTextConfig().getService().recognize(tempFile, options);
+            final SpeechResults recognize = new SpeechToTextConfig().getService().recognize(audioFile, options);
             LOGGER.log(Level.INFO, "got speech results (index={0})", recognize.getResultIndex());
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, e.getCause().toString());
@@ -75,7 +75,7 @@ class ProcessAudioFile {
      * Concept insights service.
      *
      * @param name the audio documentName
-     * @param link the youtube youTubeLink
+     * @param link the YouTube link
      */
     private void processConceptInsights(final String name, final String link) {
         LOGGER.info("initialize concept insights service");

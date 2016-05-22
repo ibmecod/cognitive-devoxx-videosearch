@@ -21,7 +21,9 @@ import static wasdev.sample.servlet.Constant.DEVOXX_CORPUS;
 @WebServlet("/labelSearch")
 public class LabelSearch extends HttpServlet {
 
-    private static final Logger LOGGER = Logger.getLogger(LabelSearch.class.getName());
+	private static final long serialVersionUID = 2492962675818275629L;
+	
+	private static final Logger LOGGER = Logger.getLogger(LabelSearch.class.getName());
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
