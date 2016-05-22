@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 /**
  * Servlet implementation class SimpleServlet
  */
-@WebServlet("/processAudioFile")
+@WebServlet("/uploadAudioFile")
 @MultipartConfig
 public class UploadAudioFileServlet extends HttpServlet {
 
@@ -32,14 +32,16 @@ public class UploadAudioFileServlet extends HttpServlet {
         // Get required parameters
         final String youTubeLink = request.getParameter("link");
         final String documentName = request.getParameter("documentName");
-        LOGGER.info("link= " + youTubeLink);
-        LOGGER.info("documentName= " + documentName);
+        LOGGER.info("link: " + youTubeLink);
+        LOGGER.info("documentName: " + documentName);
 
         // Get audio file
         File tempFile = createTempFile(request.getPart("file"));
+        LOGGER.info("temp file created: " + tempFile.getName());
 
         // Process audio file asynchronously
         new ProcessAudioFile().execute(tempFile, documentName, youTubeLink);
+        LOGGER.info("Audio file processed");
 
         // Reply to user
         response.setContentType("text/html");
