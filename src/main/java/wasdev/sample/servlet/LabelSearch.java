@@ -35,7 +35,7 @@ public class LabelSearch extends HttpServlet {
         final String account = conceptInsightsService.getFirstAccountId();
 
         Corpus corpus = new Corpus(account, DEVOXX_CORPUS);
-        corpus.addAccountPermissions(new AccountPermission(account, Permission.READ_WRITE_ADMIN));
+        //corpus.addAccountPermissions(new AccountPermission(account, Permission.READ_WRITE_ADMIN));
 
         // label search
 
@@ -71,24 +71,19 @@ public class LabelSearch extends HttpServlet {
 
         for (Concept concept : matches.getMatches()) {
             ids.add(concept.getId());
-
+            break;
         }
 
         LOGGER.info("conceptual search");
 
         Map<String, Object> parameters = new HashMap<>();
-//	    List<String> ids = new ArrayList<String>();
-//	    ids.add("/graphs/wikipedia/en-20120601/concepts/Artificial_intelligence");
-//	    ids.add("/corpora/eve6tionsto1/devoxx_corpus1");
         parameters.put(ConceptInsights.IDS, ids);
-        parameters.put(ConceptInsights.LIMIT, 10);
+        parameters.put(ConceptInsights.LIMIT, 20);
 
         RequestedFields requestedFields = new RequestedFields();
-//	    requestedFields.include("link");
+        requestedFields.include("\"user_fields\":1");
         parameters.put(ConceptInsights.DOCUMENT_FIELDS, requestedFields);
-        //parameters.put("document_fields", "{\"user_fields\":1} ");
-
-        parameters.put("link", 1);
+        
 
         QueryConcepts queryConcepts = conceptInsightsService.conceptualSearch(corpus, parameters);
 

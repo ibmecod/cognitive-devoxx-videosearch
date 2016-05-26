@@ -109,17 +109,22 @@ class ProcessAudioFile {
         for (Transcript transcript : speechResults.getResults()) {
             stringBuilder.append(transcript.getAlternatives().get(0).getTranscript());
         }
+        
+        
+		String recognizedText = stringBuilder.toString();
+		LOGGER.info("Transcript:");
+		LOGGER.info(recognizedText);
 
-        newDocument.addParts(new Part("part_", stringBuilder.toString(), HttpMediaType.TEXT_PLAIN));
+        newDocument.addParts(new Part("part_", recognizedText, HttpMediaType.TEXT_PLAIN));
 
         conceptInsights.createDocument(newDocument);
 
         // Why is the follow step needed?  GET / UPDATE
 
-        LOGGER.info("get document");
-        Document foundDocument = conceptInsights.getDocument(newDocument);
+        //LOGGER.info("get document");
+        //Document foundDocument = conceptInsights.getDocument(newDocument);
 
-        LOGGER.info("update document");
-        conceptInsights.updateDocument(foundDocument );
+        //LOGGER.info("update document");
+        //conceptInsights.updateDocument(foundDocument );
     }
 }
